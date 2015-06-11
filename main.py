@@ -89,7 +89,7 @@ def resize_images(d, name):
 				img_resized = img_cropped.resize((1280,720), Image.ANTIALIAS)
 
 				img_resized.save(dest_path + name + "_" + four_digit + ".jpg" , 'JPEG', quality=100)
-				print "%s -> %s_%s.jpg" % (file, name, four_digit )
+				print "%s%s -> %s%s_%s.jpg" % (src_path, file, dest_path, name, four_digit )
 				total += 1
 
 	print "\n"
