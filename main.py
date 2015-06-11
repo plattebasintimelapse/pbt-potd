@@ -69,9 +69,24 @@ def resize_images(d, name):
 				four_digit = file[4:-4]
 				img = Image.open( src_path + file )
 
-				# TODO - CROP IMAGE, THEN RESIZE
-				# Currently, this just squeezes the image into a standard HD size
-				img_resized = img.resize((1280,720), Image.ANTIALIAS)
+				width = img.size[0]
+				height = img.size[1]
+				half_the_width = width / 2
+				half_the_height = height / 2
+
+				ASPECT_RATIO = 1.7777777777777777777777777777777778
+
+				half_the_computed_height = width / ASPECT_RATIO / 2
+
+				# Crop from image center
+				img_cropped = img.crop((
+			        half_the_width - half_the_width,
+			        half_the_height - int(half_the_computed_height),
+			        half_the_width + half_the_width,
+			        half_the_height + int(half_the_computed_height)
+			    ))
+
+				img_resized = img_cropped.resize((1280,720), Image.ANTIALIAS)
 
 				img_resized.save(dest_path + name + "_" + four_digit + ".jpg" , 'JPEG', quality=100)
 				print "%s -> %s_%s.jpg" % (file, name, four_digit )
@@ -98,7 +113,6 @@ def create_timelapse(d, name, dest):
 	# TODO - MOVE THESE SYSTEM COMMANDS TO SUBMODULES
 
 	full_path = RESIZED_IMAGES_DIR + d + "/"
-
 
 	os.system("ffmpeg -f image2 -framerate 10 -i " + full_path + name + "_%*.jpg -c:v libx264 -crf 28 -preset medium " + dest + "/" + name + ".mp4")
 

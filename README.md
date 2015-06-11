@@ -94,10 +94,6 @@ At least at this point...
 
 	END
 
-### Usage
-
-
-
 ### TODO
 
 * Automatically pull in images from Dropbox, hourly
