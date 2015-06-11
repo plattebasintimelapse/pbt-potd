@@ -10,6 +10,34 @@ Not much. But you can resize images and then create a timelapse video of those i
 
 Before you get started, you need a set of PBT timelapse images in a folder at `images/originals`. You should also create `images/resized` for the resized images that are created.
 
+**Note:** You'll need ffmpeg installed on your machine. I just installed it with Homebrew. Unsure how this gets documented or put into system requirements.
+
+	brew install ffmpeg
+
+If you already have it installed, make sure to include the follow codecs in the build:
+
+	brew reinstall ffmpeg --with-libvpx --with-theora 
+
+I think there is a compilation guide for Raspberry Pi.
+
+Install virutalenv if you don't already have it:
+
+	pip install virtualenv
+  
+Create a virtual Python environment:
+
+  	virtualenv env
+  
+To begin using the virtual environment, it needs to be activated:
+
+  	source env/bin/activate
+  
+Install the project requirements:
+
+  	pip install -r requirements.txt
+  
+**Make some videos!**
+
 ### What You'll See
 
 At least at this point...
@@ -68,23 +96,7 @@ At least at this point...
 
 ### Usage
 
-Install virutalenv if you don't already have it:
 
-	pip install virtualenv
-  
-Create a virtual Python environment:
-
-  	virtualenv env
-  
-To begin using the virtual environment, it needs to be activated:
-
-  	source env/bin/activate
-  
-Install the project requirements:
-
-  	pip install -r requirements.txt
-  
-**Make some videos!**
 
 ### TODO
 
