@@ -2,6 +2,8 @@ video/
 images/
 cameras/
 
+picturegetter_settings.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
