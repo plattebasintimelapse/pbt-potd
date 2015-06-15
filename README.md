@@ -18,7 +18,7 @@ If you already have it installed, make sure to include the follow codecs in the 
 
 	brew reinstall ffmpeg --with-libvpx --with-theora 
 
-I think there is a compilation guide for Raspberry Pi.
+I think there is a compilation guide for Raspberry Pi. Found [here](https://trac.ffmpeg.org/wiki/CompilationGuide/RaspberryPi).
 
 Install virutalenv if you don't already have it:
 
