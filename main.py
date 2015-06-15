@@ -1,7 +1,7 @@
 import os, sys, shutil
 from PIL import Image
 
-ORIGINAL_IMAGES_DIR 	= "images/originals/"
+ORIGINAL_IMAGES_DIR 	= "cameras/"
 RESIZED_IMAGES_DIR 		= "images/resized/"
 VIDEO_OUTPUT_DIR		= "video/"
 
