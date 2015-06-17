@@ -2,7 +2,7 @@ video/
 images/
 cameras/
 
-picturegetter_settings.py
+secrets.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
