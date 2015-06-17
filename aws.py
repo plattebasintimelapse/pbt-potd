@@ -7,6 +7,7 @@ from secrets import AWS_KEY, AWS_SECRET
 CONN = S3Connection(AWS_KEY, AWS_SECRET)
 
 def send_file_to_S3(file,bucket):
+    print "Uploading %s to %s" % (file, bucket)
     k = Key(bucket)
     k.key = file
     k.set_contents_from_filename(file)
@@ -17,6 +18,7 @@ def send_dir_to_S3(src_path,bucket):
     for file in d:
         if os.path.isfile( src_path + file ):
             file_path = src_path + file
+            print "Uploading %s to %s" % (file_path, bucket)
             k = Key(bucket)
             k.key = file_path
             k.set_contents_from_filename(file_path)
