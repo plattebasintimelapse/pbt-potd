@@ -1,3 +1,0 @@
-devtoken = "UVQ5m3raMz0AAAAAAAAGHeRImewfgRWzfnoaenx4gcQBEy1aRvk6AnLf2twic6eL"
-
-token = "85Lua-L8dZAAAAAAABPfgjGud0zH-eCi0wGWvml6c5Q8-lf6weAo46KBwZ8Lip3l"

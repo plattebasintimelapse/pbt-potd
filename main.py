@@ -1,9 +1,15 @@
-import os, sys, shutil
+import os, sys, shutil, datetime
 from PIL import Image
+import aws
+
+AWS_BUCKET_NAME			= "pbttestbucket"
 
 ORIGINAL_IMAGES_DIR 	= "cameras/"
-RESIZED_IMAGES_DIR 		= "images/resized/"
+RESIZED_IMAGES_DIR 		= "images/"
 VIDEO_OUTPUT_DIR		= "video/"
+
+t 						= datetime.date.today()
+TODAY 					= str(t)
 
 def query_yes_no(question, default="yes"):
     valid = {"yes": True, "y": True, "ye": True,
@@ -52,7 +58,7 @@ def make_dir(d):
 #-----------------------------------------------------#
 def resize_images(d, name):
 	src_path = ORIGINAL_IMAGES_DIR + d + "/"
-	dest_path = RESIZED_IMAGES_DIR + d + "/"
+	dest_path = RESIZED_IMAGES_DIR + d + "/" + TODAY + "/"
 
 	make_dir(dest_path)
 
@@ -103,31 +109,31 @@ def resize_images(d, name):
 # Utiliztes ffmpeg command - more info here https://www.ffmpeg.org/
 # @param 	d 		string 		Name of source directory containing resized images
 # @param	name 	string 		Name of the file preceeding the extracted four_digits of original file
-# @param	dest 	string 		Output directory for files
 #-----------------------------------------------------#
-def create_timelapse(d, name, dest):
+def create_timelapse(d, name):
 
 	# TODO - COMPILE FFMPEG WITH OGG AND WEBM CODEC - DONE
 	# In order to render out .OGG and .WebM for HTML5 video playback, ya gotta compile ffmpeg with --enabled-libtheora and --enabled-libvpx. Google FFMPEG complication guide and there's information there. It'll depend on the system we end up using. I installed with Homebrew on my OSX machine.
 
 	# TODO - MOVE THESE SYSTEM COMMANDS TO SUBMODULES
 
-	full_path = RESIZED_IMAGES_DIR + d + "/"
+	output_dir = VIDEO_OUTPUT_DIR + d + "/" + TODAY + "/"
+	make_dir(output_dir)
 
-	os.system("ffmpeg -f image2 -framerate 10 -i " + full_path + name + "_%*.jpg -c:v libx264 -crf 28 -preset medium " + dest + "/" + name + ".mp4")
+	img_dir = RESIZED_IMAGES_DIR + d + "/" + TODAY + "/"
 
-	os.system("ffmpeg -f image2 -framerate 10 -i " + full_path + name + "_%*.jpg -c:v theora -q:v 7 " + dest + "/" + name + ".ogg")
-
-	os.system("ffmpeg -f image2 -framerate 10 -i " + full_path + name + "_%*.jpg -c:v libvpx -crf 6 -b:v 2M " + dest + "/" + name + ".webm")
+	os.system("ffmpeg -f image2 -framerate 10 -i " + img_dir + name + "_%*.jpg -c:v libx264 -crf 28 -preset medium " + output_dir + "/" + name + ".mp4")
+	os.system("ffmpeg -f image2 -framerate 10 -i " + img_dir + name + "_%*.jpg -c:v theora -q:v 7 " + output_dir + "/" + name + ".ogg")
+	os.system("ffmpeg -f image2 -framerate 10 -i " + img_dir + name + "_%*.jpg -c:v libvpx -crf 6 -b:v 2M " + output_dir + "/" + name + ".webm")
 
 	print "\n"
 	print "Complete!"
-	print "Your videos are located in %s" % (dest)
+	print "Your videos are located in %s" % (output_dir)
 	print "\n"
 
-	if query_yes_no("Do you want to delete the resized images located in " + full_path +"?", "no"):
-		shutil.rmtree( full_path )
-		print "Deleting directory %s" % (full_path)
+	if query_yes_no("Do you want to delete the resized images located in " + img_dir +"?", "no"):
+		shutil.rmtree( img_dir )
+		print "Deleting directory %s" % (img_dir)
 		print "\n"
 
 if __name__ == "__main__":
@@ -152,7 +158,6 @@ if __name__ == "__main__":
 
 		resize_images(cam_num, cam_num)
 
-
 	###################
 	## Timelapse Gen ##
 	###################
@@ -160,17 +165,22 @@ if __name__ == "__main__":
 
 		prompt_break()
 
+		# Create timelapses for each camera
 		cam_num = get_string_from_user("What camera do you want to create a timelapse for?")
 		while not os.path.exists( RESIZED_IMAGES_DIR + cam_num + "/" ):
 			cam_num = get_string_from_user("Enter a valid camera number for images that have already been resized.")
 
-		output_dir = raw_input("Output Folder: ")
-		output_dir = VIDEO_OUTPUT_DIR + output_dir
+		create_timelapse(cam_num, cam_num)
 
-		make_dir(output_dir)
+	while query_yes_no("Do you want to upload the video to AWS?", "no"):
 
-		create_timelapse(cam_num, cam_num, output_dir)
+		prompt_break()
 
+		cam_num = get_string_from_user("What camera do you want to upload?")
+		while not os.path.exists( VIDEO_OUTPUT_DIR + cam_num + "/" ):
+			cam_num = get_string_from_user("Enter a valid camera number for images that have already been resized.")
+
+		aws.send_dir_to_S3( VIDEO_OUTPUT_DIR + cam_num + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
 
 	prompt_break()
 	print "END"

@@ -1,11 +1,11 @@
 import os, string
 import time
 import dropbox
-from picturegetter_settings import token
+from secrets import DROPBOX_TOKEN
 
 #First get logged into DropBox
 
-client = dropbox.client.DropboxClient(token)
+client = dropbox.client.DropboxClient(DROPBOX_TOKEN)
 
 #Now let's make sure all the directories we need are there.
 
