@@ -40,10 +40,10 @@ Install the project requirements:
 
 ### TODO
 
-[ ] Automatically pull in images from Dropbox, hourly
-[x] Send resized images to AWS for serveing
-[ ] Cron job to create timelapses nightly
-[ ] Cron job to create weekly timelapses nightly
-[ ] Delete resized images, locally, only after used in weekly timelapse
-[x] Send videos to AWS for serving
-[ ] A bunch of other things, I have no idea what the hell I'm doing
+- [ ] Automatically pull in images from Dropbox, hourly
+- [x] Send resized images to AWS for serveing
+- [ ] Cron job to create timelapses nightly
+- [ ] Cron job to create weekly timelapses nightly
+- [ ] Delete resized images, locally, only after used in weekly timelapse
+- [x] Send videos to AWS for serving
+- [ ] A bunch of other things, I have no idea what the hell I'm doing
