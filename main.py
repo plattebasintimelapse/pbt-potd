@@ -11,7 +11,7 @@ VIDEO_OUTPUT_DIR		= "video/"
 t 						= datetime.date.today()
 TODAY 					= str(t)
 
-CAM_DIRECTORIES = ["002","003","006","/008","016","017","018","021","027", "029","030","031","034","036","037","038","039","040","041","042","048","050","051","055","056","132","232"]
+CAM_DIRECTORIES = ["002","003","006","008","016","017","018","021","027", "029","030","031","034","036","037","038","039","040","041","042","048","050","051","055","056","132","232"]
 
 def query_yes_no(question, default="yes"):
     valid = {"yes": True, "y": True, "ye": True,
@@ -91,7 +91,7 @@ def resize_images(d, name):
 	print "Resizing Images:"
 	for file in dirs:
 		if os.path.isfile( src_path + file ):
-			if file.endswith('.JPG') or file.endswith('.jpg'):
+			if file.endswith('.JPG') or file.endswith('.jpg'): # only process jpgs.
 
 				four_digit = file[4:-4] # four digit string in file name
 				full_dest_path = dest_path + name + "_" + four_digit + ".jpg"
@@ -99,7 +99,8 @@ def resize_images(d, name):
 				if os.path.exists(full_dest_path):
 					print "Already resized %s" % full_dest_path
 				else:
-					if is_non_zero_file( src_path + file ):
+					if is_non_zero_file( src_path + file ): # skip partially download files
+
 						img = Image.open( src_path + file )
 
 						width = img.size[0]
@@ -151,14 +152,14 @@ def create_timelapse(d, name):
 
 	num_of_images_in_dir = get_count_files_in_directory(img_dir)
 
-	if (num_of_images_in_dir > 30 ):
-		speed = str(10)
-	elif (num_of_images_in_dir > 20 ):
-		speed = str(8)
-	elif (num_of_images_in_dir > 10 ):
-		speed = str(4)
-	else:
+	if ( 0 < num_of_images_in_dir <= 10 ):
 		speed = str(2)
+	elif ( 10 < num_of_images_in_dir <= 20 ):
+		speed = str(4)
+	elif ( 20 < num_of_images_in_dir <= 30 ):
+		speed = str(8)
+	else:
+		speed = str(10)
 
 	if (num_of_images_in_dir != 0 ):
 		os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libx264 -crf 28 -preset medium " + output_dir + name + ".mp4")
@@ -201,8 +202,8 @@ if __name__ == "__main__":
 	## Upload Images to AWS ##
 	##      every hour      ##
 	##########################
-	for cam in CAM_DIRECTORIES:
-		aws.send_dir_to_S3( RESIZED_IMAGES_DIR + cam + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
+	# for cam in CAM_DIRECTORIES:
+	# 	aws.send_dir_to_S3( RESIZED_IMAGES_DIR + cam + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
 
 	###################
 	## Timelapse Gen ##
