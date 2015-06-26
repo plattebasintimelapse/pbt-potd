@@ -1,0 +1,30 @@
+from django.db import models
+
+class Camera(models.Model):
+    name = models.CharField(max_length=255)
+    name_slug = models.SlugField()
+    location_x = models.FloatField()
+    location_y = models.FloatField()
+    description = models.TextField(blank=True, null=True)
+    start_date = models.DateField()
+    def __str__(self):
+        return self.name
+        
+class Photo(models.Model):
+    camera = models.ForeignKey(Camera)
+    photo = models.ImageField(upload_to='photos/')
+    photo_description = models.TextField(blank=True, null=True)
+    photo_datetime = models.DateTimeField()
+    photo_aperture = models.CharField(max_length=50)
+    photo_shutter_speed = models.CharField(max_length=50)
+    photo_iso = models.CharField(max_length=50)
+    def __str__(self):
+        return "%s from %s" % (self.id, self.camera.name)
+        
+class TimeLapse(models.Model):
+    camera = models.ForeignKey(Camera)
+    movie = models.FileField(upload_to='movies/')
+    movie_date = models.DateTimeField()
+    movie_description = models.TextField(blank=True, null=True)
+    def __str__(self):
+        return "%s from %s" % (self.movie_date, self.camera.name)
