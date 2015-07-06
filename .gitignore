@@ -2,6 +2,8 @@ video/
 images/
 cameras/
 
+.DS_Store
+
 secrets.py
 
 # Byte-compiled / optimized / DLL files
