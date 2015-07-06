@@ -7,7 +7,7 @@ class Camera(models.Model):
     location_x = models.FloatField()
     location_y = models.FloatField()
     description = models.TextField(blank=True, null=True)
-    start_date = models.DateField()
+    start_date = models.DateField(blank=True, null=True)
     def __str__(self):
         return self.name
         
