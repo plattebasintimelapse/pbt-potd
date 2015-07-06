@@ -2,14 +2,14 @@ import os, sys, shutil, datetime
 from PIL import Image
 import picturegetter, aws
 
-AWS_BUCKET_NAME			= "pbt-potd"
+AWS_BUCKET_NAME            = "pbt-potd"
 
-ORIGINAL_IMAGES_DIR 	= "cameras/"
-RESIZED_IMAGES_DIR 		= "images/"
-VIDEO_OUTPUT_DIR		= "video/"
+ORIGINAL_IMAGES_DIR     = "cameras/"
+RESIZED_IMAGES_DIR         = "images/"
+VIDEO_OUTPUT_DIR        = "video/"
 
-t 						= datetime.date.today()
-TODAY 					= str(t)
+t                         = datetime.date.today()
+TODAY                     = str(t)
 
 CAM_DIRECTORIES = ["002","003","006","008","016","017","018","021","027","029","030","031","034","036","037","038","039","040","041","042","048","050","055","056","132","232"]
 
@@ -24,7 +24,7 @@ def query_yes_no(question, default="yes"):
         prompt = " [y/N] "
     else:
         raise ValueError("invalid default answer: '%s'" % default)
-
+    
     while True:
         print question + prompt
         choice = raw_input().lower()
@@ -36,188 +36,190 @@ def query_yes_no(question, default="yes"):
             print "Please respond with 'yes' or 'no' (or 'y' or 'n')."
 
 def prompt_break():
-	print "\n"
-	print "-------------------------------------------------"
-	print "\n"
+    print "\n"
+    print "-------------------------------------------------"
+    print "\n"
 
 def get_string_from_user(prompt):
-	print prompt
-
-	n = None
-	while n is None:
-		a = raw_input("Enter a directory: ")
-		n = str(a)
-		return n
+    print prompt
+    
+    n = None
+    while n is None:
+        a = raw_input("Enter a directory: ")
+        n = str(a)
+        return n
 
 def make_dir(d):
-	if not os.path.exists(d):
-		os.makedirs(d)
+    if not os.path.exists(d):
+        os.makedirs(d)
 
 def delete_dir(d):
-	if os.path.exists(d):
-		shutil.rmtree( d )
-		print "Deleting directory %s" % (d)
-	else:
-		print "%s does not exists" % (d)
+    if os.path.exists(d):
+        shutil.rmtree( d )
+        print "Deleting directory %s" % (d)
+    else:
+        print "%s does not exists" % (d)
 
-def is_non_zero_file(fpath):  
+def is_non_zero_file(fpath):
     return True if os.path.isfile(fpath) and os.path.getsize(fpath) > 0 else False
 
 def get_count_files_in_directory(path):
-  	list_dir = []
-  	list_dir = os.listdir(path)
-  	count = 0
-  	for file in list_dir:
-  		count += 1
-
-  	return count
+      list_dir = []
+      list_dir = os.listdir(path)
+      count = 0
+      for file in list_dir:
+          count += 1
+      
+      return count
 
 #-----------------------------------------------------#
 # Resizes and renames images in the @param d directory
-# @param 	d 		string 		Name of source directory containing images
-# @param	name 	string 		Name of the new file, preceeding the extracted four_digits of original file
+# @param     d         string         Name of source directory containing images
+# @param    name     string         Name of the new file, preceeding the extracted four_digits of original file
 #-----------------------------------------------------#
 def resize_images(d, name):
-	src_path = ORIGINAL_IMAGES_DIR + d + "/"
-	dest_path = RESIZED_IMAGES_DIR + d + "/" + TODAY + "/"
-
-	make_dir(dest_path)
-
-	dirs = os.listdir( src_path )
-
-	total = 0
-
-	print "\n"
-	print "Resizing Images:"
-	for file in dirs:
-		if os.path.isfile( src_path + file ):
-			if file.endswith('.JPG') or file.endswith('.jpg'): # only process jpgs.
-
-				four_digit = file[4:-4] # four digit string in file name
-				full_dest_path = dest_path + name + "_" + four_digit + ".jpg"
-
-				if os.path.exists(full_dest_path):
-					print "Already resized %s" % full_dest_path
-				else:
-					if is_non_zero_file( src_path + file ): # skip partially download files
-
-						img = Image.open( src_path + file )
-
-						width = img.size[0]
-						height = img.size[1]
-						half_the_width = width / 2
-						half_the_height = height / 2
-
-						ASPECT_RATIO = 1.7777777777777777777777777777777778
-
-						half_the_computed_height = width / ASPECT_RATIO / 2
-
-						# Crop from image center
-						img_cropped = img.crop((
-					        half_the_width - half_the_width,
-					        half_the_height - int(half_the_computed_height),
-					        half_the_width + half_the_width,
-					        half_the_height + int(half_the_computed_height)
-					    ))
-
-						img_resized = img_cropped.resize((1280,720), Image.ANTIALIAS)
-
-						img_resized.save( full_dest_path , 'JPEG', quality=100)
-						print "%s%s -> %s" % (src_path, file, full_dest_path )
-						total += 1
-
-	print "\n"
-	print "-------------------------------------------------"
-	print "%s images were resized successfully into %s" % (total, dest_path )
-	print "-------------------------------------------------"
-	print "\n"
+    src_path = ORIGINAL_IMAGES_DIR + d + "/"
+    dest_path = RESIZED_IMAGES_DIR + d + "/" + TODAY + "/"
+    
+    make_dir(dest_path)
+    
+    dirs = os.listdir( src_path )
+    
+    total = 0
+    
+    print "\n"
+    print "Resizing Images:"
+    for file in dirs:
+        if os.path.isfile( src_path + file ):
+            if file.endswith('.JPG') or file.endswith('.jpg'): # only process jpgs.
+                
+                four_digit = file[4:-4] # four digit string in file name
+                full_dest_path = dest_path + name + "_" + four_digit + ".jpg"
+                
+                if os.path.exists(full_dest_path):
+                    print "Already resized %s" % full_dest_path
+                else:
+                    if is_non_zero_file( src_path + file ): # skip partially download files
+                        
+                        img = Image.open( src_path + file )
+                        
+                        width = img.size[0]
+                        height = img.size[1]
+                        half_the_width = width / 2
+                        half_the_height = height / 2
+                        
+                        ASPECT_RATIO = 1.7777777777777777777777777777777778
+                        
+                        half_the_computed_height = width / ASPECT_RATIO / 2
+                        
+                        # Crop from image center
+                        img_cropped = img.crop((
+                            half_the_width - half_the_width,
+                            half_the_height - int(half_the_computed_height),
+                            half_the_width + half_the_width,
+                            half_the_height + int(half_the_computed_height)
+                        ))
+                        
+                        exif = img.info['exif']
+                        
+                        img_resized = img_cropped.resize((1280,720), Image.ANTIALIAS, exif=exif)
+                        
+                        img_resized.save( full_dest_path , 'JPEG', quality=100)
+                        print "%s%s -> %s" % (src_path, file, full_dest_path )
+                        total += 1
+    
+    print "\n"
+    print "-------------------------------------------------"
+    print "%s images were resized successfully into %s" % (total, dest_path )
+    print "-------------------------------------------------"
+    print "\n"
 
 #-----------------------------------------------------#
 # Creates several timelapse video files from the @param d directory
 # Utiliztes ffmpeg command - more info here https://www.ffmpeg.org/
-# @param 	d 		string 		Name of source directory containing resized images
-# @param	name 	string 		Name of the file preceeding the extracted four_digits of original file
+# @param     d         string         Name of source directory containing resized images
+# @param    name     string         Name of the file preceeding the extracted four_digits of original file
 #-----------------------------------------------------#
 def create_timelapse(d, name):
-
-	# TODO - COMPILE FFMPEG WITH OGG AND WEBM CODEC - DONE
-	# In order to render out .OGG and .WebM for HTML5 video playback, ya gotta compile ffmpeg with --enabled-libtheora and --enabled-libvpx. Google FFMPEG complication guide and there's information there. It'll depend on the system we end up using. I installed with Homebrew on my OSX machine.
-
-	# TODO - MOVE THESE SYSTEM COMMANDS TO SUBMODULES
-
-	output_dir = VIDEO_OUTPUT_DIR + d + "/" + TODAY + "/"
-	make_dir(output_dir)
-
-	img_dir = RESIZED_IMAGES_DIR + d + "/" + TODAY + "/"
-
-	num_of_images_in_dir = get_count_files_in_directory(img_dir)
-
-	if ( 0 < num_of_images_in_dir <= 10 ):
-		speed = str(2)
-	elif ( 10 < num_of_images_in_dir <= 20 ):
-		speed = str(4)
-	elif ( 20 < num_of_images_in_dir <= 30 ):
-		speed = str(8)
-	else:
-		speed = str(10)
-
-	if (num_of_images_in_dir != 0 ):
-		os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libx264 -crf 28 -preset medium " + output_dir + name + ".mp4")
-		os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v theora -q:v 7 " + output_dir + name + ".ogg")
-		os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libvpx -crf 6 -b:v 2M " + output_dir + name + ".webm")
-
-		print "\n"
-		print "Complete!"
-		print "Your videos are located in %s" % (output_dir)
-		print "\n"
+    
+    # TODO - COMPILE FFMPEG WITH OGG AND WEBM CODEC - DONE
+    # In order to render out .OGG and .WebM for HTML5 video playback, ya gotta compile ffmpeg with --enabled-libtheora and --enabled-libvpx. Google FFMPEG complication guide and there's information there. It'll depend on the system we end up using. I installed with Homebrew on my OSX machine.
+    
+    # TODO - MOVE THESE SYSTEM COMMANDS TO SUBMODULES
+    
+    output_dir = VIDEO_OUTPUT_DIR + d + "/" + TODAY + "/"
+    make_dir(output_dir)
+    
+    img_dir = RESIZED_IMAGES_DIR + d + "/" + TODAY + "/"
+    
+    num_of_images_in_dir = get_count_files_in_directory(img_dir)
+    
+    if ( 0 < num_of_images_in_dir <= 10 ):
+        speed = str(2)
+    elif ( 10 < num_of_images_in_dir <= 20 ):
+        speed = str(4)
+    elif ( 20 < num_of_images_in_dir <= 30 ):
+        speed = str(8)
+    else:
+        speed = str(10)
+    
+    if (num_of_images_in_dir != 0 ):
+        os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libx264 -crf 28 -preset medium " + output_dir + name + ".mp4")
+        os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v theora -q:v 7 " + output_dir + name + ".ogg")
+        os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libvpx -crf 6 -b:v 2M " + output_dir + name + ".webm")
+        
+        print "\n"
+        print "Complete!"
+        print "Your videos are located in %s" % (output_dir)
+        print "\n"
 
 if __name__ == "__main__":
-
-	print "\n"
-	print "Greetings!"
-	print "I'll help you make some timelapse videos!"
-	print "First, you'll need to resize your images. And then you can use those images to create a video."
-	print "\n"
-
-	##################################
-	## Download Images from Dropbox ##
-	##        every 15 mins         ##
-	##################################
-	while query_yes_no("Do you want to download images from Dropbox? \nIt may take a long while.", "no"):
-		picturegetter.download_images(ORIGINAL_IMAGES_DIR, CAM_DIRECTORIES)
-
-	##################################
-	## Delete Previous Weeks Images ##
-	##        each morning          ##
-	##################################
-
-	###################
-	## Resize Images ##
-	##   every hour  ##
-	###################
-	for cam in CAM_DIRECTORIES:
-		resize_images(cam, cam)
-
-	##########################
-	## Upload Images to AWS ##
-	##      every hour      ##
-	##########################
-	# for cam in CAM_DIRECTORIES:
-	# 	aws.send_dir_to_S3( RESIZED_IMAGES_DIR + cam + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
-
-	###################
-	## Timelapse Gen ##
-	##   each night  ##
-	###################
-	for cam in CAM_DIRECTORIES:
-		create_timelapse(cam, cam)
-
-	#############################
-	## Upload Timelapse to AWS ##
-	##        each night       ##
-	#############################
-	for cam in CAM_DIRECTORIES:
-		aws.send_dir_to_S3( VIDEO_OUTPUT_DIR + cam + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
-
-	prompt_break()
-	print "END"
+    
+    print "\n"
+    print "Greetings!"
+    print "I'll help you make some timelapse videos!"
+    print "First, you'll need to resize your images. And then you can use those images to create a video."
+    print "\n"
+    
+    ##################################
+    ## Download Images from Dropbox ##
+    ##        every 15 mins         ##
+    ##################################
+    while query_yes_no("Do you want to download images from Dropbox? \nIt may take a long while.", "no"):
+        picturegetter.download_images(ORIGINAL_IMAGES_DIR, CAM_DIRECTORIES)
+    
+    ##################################
+    ## Delete Previous Weeks Images ##
+    ##        each morning          ##
+    ##################################
+    
+    ###################
+    ## Resize Images ##
+    ##   every hour  ##
+    ###################
+    for cam in CAM_DIRECTORIES:
+        resize_images(cam, cam)
+    
+    ##########################
+    ## Upload Images to AWS ##
+    ##      every hour      ##
+    ##########################
+    # for cam in CAM_DIRECTORIES:
+    #     aws.send_dir_to_S3( RESIZED_IMAGES_DIR + cam + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
+    
+    ###################
+    ## Timelapse Gen ##
+    ##   each night  ##
+    ###################
+    for cam in CAM_DIRECTORIES:
+        create_timelapse(cam, cam)
+    
+    #############################
+    ## Upload Timelapse to AWS ##
+    ##        each night       ##
+    #############################
+    for cam in CAM_DIRECTORIES:
+        aws.send_dir_to_S3( VIDEO_OUTPUT_DIR + cam + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
+    
+    prompt_break()
+    print "END"
