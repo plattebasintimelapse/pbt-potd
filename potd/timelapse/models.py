@@ -3,6 +3,7 @@ from django.db import models
 class Camera(models.Model):
     name = models.CharField(max_length=255)
     name_slug = models.SlugField()
+    number = models.CharField(max_length=4, blank=True, null=True)
     location_x = models.FloatField()
     location_y = models.FloatField()
     description = models.TextField(blank=True, null=True)
