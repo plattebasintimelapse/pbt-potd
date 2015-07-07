@@ -1,0 +1,41 @@
+{% extends "__base.html" %}
+
+{% block content %}
+
+	<div id="fullpage">
+	    <div class="section centered" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
+	    	<div class="container container-small">
+                <h1>{{camera.name}}</h1>
+				<h2>{{photo_list|length }} images on {{month}}/{{day}}/{{year}}</h2>
+				<a class="btn btn-default" href="{% url 'camera' camera.name_slug %}">See Today</a>
+            </div>
+	    </div>
+
+		{% if photo_list %}
+		    <div class="section">
+
+		    	{% for photo in photo_list %}
+		            <div class="slide bottom" style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
+		                <div class="slide-meta slide-meta-bottom slide-meta-left">
+		                    <h2>{{photo.photo_datetime}}</h2>
+		                    <p>ISO: {{photo.photo_iso}} | Shutter Speed: {{photo.photo_shutter_speed}} | Aperture: {{photo.photo_aperture}}</p>
+		                </div>
+		            </div>
+	            {% endfor %}
+
+	        </div>
+        {% else %}
+			<div class="section">
+
+	            <div class="slide bottom" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
+	                <p>No Images from {{month}}/{{day}}/{{year}}!</p>
+	            </div>
+	            <div class="slide bottom" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
+	                <p>No Images from {{month}}/{{day}}/{{year}}!</p>
+	            </div>
+	            
+	        </div>
+		{% endif %}
+	</div>
+
+{% endblock %}
