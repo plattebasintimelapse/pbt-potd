@@ -6,6 +6,17 @@ cameras/
 
 secrets.py
 
+# Grunt stuff
+.sass-cache
+.tmp
+**/.*
+test/
+tests/
+node_modules/
+bower_components/
+
+fonts/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
