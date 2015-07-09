@@ -7,7 +7,7 @@
 	    	<div class="container container-small">
                 <h1>{{camera.name}}</h1>
 				<h2>{{photo_list|length }} images on {{month}}/{{day}}/{{year}}</h2>
-				<a class="btn btn-default" href="{% url 'camera' camera.name_slug %}">See Today</a>
+				<a class="btn btn-default" href="{% url 'camera' camera.name_slug %}#today">See Today</a>
             </div>
 	    </div>
 
@@ -27,9 +27,6 @@
         {% else %}
 			<div class="section">
 
-	            <div class="slide bottom" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
-	                <p>No Images from {{month}}/{{day}}/{{year}}!</p>
-	            </div>
 	            <div class="slide bottom" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
 	                <p>No Images from {{month}}/{{day}}/{{year}}!</p>
 	            </div>

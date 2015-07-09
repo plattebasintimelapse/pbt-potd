@@ -18,6 +18,16 @@ def camera(request, slug):
 	}
 	return render(request, 'camera.html', context)
 
+def archive(request):
+	camera_list = Camera.objects.all()
+	context = { 'camera_list': camera_list, }
+	return render(request, 'archive.html', context)
+
+def archive_camera(request, slug):
+	camera = Camera.objects.get(name_slug=slug) # Get camera object based off of slug in URL
+	context = { 'camera': camera, }
+	return render(request, 'archive_camera.html', context)
+
 def archive_camera_day(request, slug, year, month, day):
 	camera = Camera.objects.get(name_slug=slug) # Get camera object based off of slug in URL
 	cam_num = camera.number 					# Assign camera number to be used in Photo query
