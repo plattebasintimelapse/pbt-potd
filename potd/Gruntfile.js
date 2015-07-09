@@ -51,6 +51,7 @@ module.exports = function(grunt) {
                         'bower_components/fullpage.js/vendors/jquery.easings.min.js',
                         'bower_components/fullpage.js/vendors/jquery.slimscroll.min.js',
                         'bower_components/fullpage.js/jquery.fullPage.min.js',
+                        'bower_components/jquery.lazyload/jquery.lazyload.js',
                         '<%= config.assets %>/js/main.js'
                     ]
                 }

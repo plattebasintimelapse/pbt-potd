@@ -27,6 +27,10 @@ h2 {
 	text-align: center;
 }
 
+.section.section-dark, .slide.slide-dark {
+	background-color: black;
+}
+
 .section.bottom, .slide.bottom {
 	.fp-tableCell {
 		vertical-align: bottom;
@@ -51,8 +55,13 @@ h2 {
 	&.slide-meta-bottom { bottom: 0; }
 }
 
-.fp-slidesNav ul li a span {
-  	background: white;
+#fp-nav ul li, .fp-slidesNav ul li {
+  	width: 8px;
+  	height: 8px;
+  	margin: 2px;
+  	a span {
+  		background: white;
+	}
 }
 
 .overlay {
@@ -65,6 +74,12 @@ h2 {
 	left:0;
 	z-index: 8;
 
+}
+
+
+video.full {
+	width: 100%;
+	z-index:3;
 }
 
 .v-centered {

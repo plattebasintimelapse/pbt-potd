@@ -12,4 +12,11 @@ $(document).ready(function () {
 		$('.overlay').toggleClass('hidden');
 		$(this).find('i').toggleClass('fa-bars fa-close')
 	});
+
+	$("img.lazy").lazyload({
+		container: $("#fullpage"),
+		effect : "fadeIn",
+		event : "mouseover"
+
+	});
 });

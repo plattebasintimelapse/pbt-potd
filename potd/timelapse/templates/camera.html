@@ -29,8 +29,9 @@
             </div>
         </div>
 
-	    <div 	class="section centered"
-	    		style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );"
+	    <div 	class="section centered lazy"
+	    		data-original="{{ STATIC_URL }}images/placeholder.jpg"
+	    		style="background-image: url( '{{ STATIC_URL }}images/placeholder.jpg' );"
 	    		data-anchor="home">
 
 	    	<div class="container container-small">
@@ -44,7 +45,9 @@
 		    		data-anchor="today">
 
 		    	{% for photo in todays_images %}
-		            <div class="slide bottom" style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
+		            <div 	class="slide bottom lazy"
+		            		data-original="https://pbt-potd.s3.amazonaws.com/{{photo.photo}}"
+		            		style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
 		                <div class="slide-meta slide-meta-bottom slide-meta-left">
 		                    <h2>{{photo.photo_datetime}}</h2>
 		                    <p>ISO: {{photo.photo_iso}} | Shutter Speed: {{photo.photo_shutter_speed}} | Aperture: {{photo.photo_aperture}}</p>
@@ -62,18 +65,18 @@
 		{% endif %}
 
 		{% if yesterday_timelapse %}
-		    <div 	class="section"
+		    <div 	class="section center section-dark"
 		    		data-anchor="yesterday">
 
-		    	{% for tl in yesterday_timelapse %}
-		            <div class="slide bottom" style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
-		                <div class="slide-meta slide-meta-bottom slide-meta-left">
-		                    <h3>Some sweet videos</h3>
-		                </div>
-		            </div>
-	            {% endfor %}
+		    	<video autoplay loop class="full">
+	                <source src="https://pbt-potd.s3.amazonaws.com/{{yesterday_timelapse.movie}}">
+                </video>
+                <div class="slide-meta slide-meta-bottom slide-meta-left">
+                    <h2>{{ yesterday_timelapse.movie_date|date:"DATE_FORMAT"}}</h2>
+                </div>
 
 	        </div>
+
         {% else %}
 			<div class="section centered" data-anchor="yesterday" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
 
