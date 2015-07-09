@@ -13,6 +13,8 @@ TODAY                     = str(t)
 
 CAM_DIRECTORIES = ["002","003","006","008","016","017","018","021","027", "029","030","031","034","036","037","038","039","040","041","042","048","050","051","055","056","132","232"]
 
+CAM_DIRECTORIES = ["002"]
+
 def query_yes_no(question, default="yes"):
     valid = {"yes": True, "y": True, "ye": True,
              "no": False, "n": False}
@@ -218,8 +220,8 @@ if __name__ == "__main__":
     ## Upload Timelapse to AWS ##
     ##        each night       ##
     #############################
-    for cam in CAM_DIRECTORIES:
-        aws.send_dir_to_S3( VIDEO_OUTPUT_DIR + cam + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
+    #for cam in CAM_DIRECTORIES:
+    #    aws.send_dir_to_S3( VIDEO_OUTPUT_DIR + cam + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
     
     prompt_break()
     print "END"
