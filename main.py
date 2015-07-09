@@ -1,6 +1,27 @@
 import os, sys, shutil, datetime
 from PIL import Image
 import picturegetter, aws
+from PIL.ExifTags import TAGS
+from django.utils import timezone
+from django.core.files import File
+
+# THIS IS HACKY AS SHIT AND YOU'LL NEED TO CHANGE IT FOR YOUR OWN PATHING PURPOSES
+proj_path = "/Users/mattwaite/Dropbox/PBT/pbt-potd/potd"
+#END HACKY AS SHIT PART
+
+
+# This is so Django knows where to find stuff.
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "potd.settings")
+sys.path.append(proj_path)
+
+# This is so my local_settings.py gets loaded.
+os.chdir(proj_path)
+
+# This is so models get loaded.
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+
+from timelapse.models import Camera, Photo, TimeLapse
 
 AWS_BUCKET_NAME            = "pbt-potd"
 
@@ -122,11 +143,20 @@ def resize_images(d, name):
                         
                         exif = img.info['exif']
                         
-                        img_resized = img_cropped.resize((1280,720), Image.ANTIALIAS, exif=exif)
+                        img_resized = img_cropped.resize((1280,720), Image.ANTIALIAS)
                         
-                        img_resized.save( full_dest_path , 'JPEG', quality=100)
+                        img_resized.save( full_dest_path , 'JPEG', quality=100, exif=exif)
                         print "%s%s -> %s" % (src_path, file, full_dest_path )
                         total += 1
+                        
+                        exdate = datetime.datetime.strptime(img._getexif()[36867], "%Y:%m:%d %H:%M:%S")
+                        exdate = timezone.make_aware(exdate, timezone.get_current_timezone())
+                        f = File(open(full_dest_path, 'r'))
+                        cam = Camera.objects.get(number=name)
+                        pic = Photo(camera=cam, photo=f, photo_datetime=exdate)
+                        pic.photo.save(full_dest_path,f)
+                        pic.save()
+                        print "Saved a photo into the backend"
     
     print "\n"
     print "-------------------------------------------------"
@@ -167,6 +197,14 @@ def create_timelapse(d, name):
         os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libx264 -crf 28 -preset medium " + output_dir + name + ".mp4")
         os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v theora -q:v 7 " + output_dir + name + ".ogg")
         os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libvpx -crf 6 -b:v 2M " + output_dir + name + ".webm")
+        
+        moviepath = output_dir + name + ".mp4"
+        f = File(open(moviepath, 'r'))
+        cam = Camera.objects.get(number=name)
+        movietime = datetime.datetime.now()
+        vid = TimeLapse(camera=cam, movie=f, movie_date=movietime)
+        vid.movie.save(moviepath,f)
+        vid.save()
         
         print "\n"
         print "Complete!"
@@ -218,8 +256,8 @@ if __name__ == "__main__":
     ## Upload Timelapse to AWS ##
     ##        each night       ##
     #############################
-    for cam in CAM_DIRECTORIES:
-        aws.send_dir_to_S3( VIDEO_OUTPUT_DIR + cam + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
+    #for cam in CAM_DIRECTORIES:
+    #    aws.send_dir_to_S3( VIDEO_OUTPUT_DIR + cam + "/" + TODAY + "/", aws.get_bucket(AWS_BUCKET_NAME) )
     
     prompt_break()
     print "END"
