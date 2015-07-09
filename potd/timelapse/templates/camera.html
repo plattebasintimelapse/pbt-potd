@@ -1,0 +1,129 @@
+{% extends "__base.html" %}
+
+{% block content %}
+
+	<div id="fullpage">
+
+		<div class="overlay hidden">
+            <div class="v-centered h-centered text-center">
+            	<div class="col-sm-4 col-sm-offset-1">
+            	    <h1>Navigation Stuff</h1>
+            	    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident accusantium natus vitae odit incidunt numquam ducimus officia. Dolore, neque excepturi. Quam, omnis autem. Quis consequatur fugit accusantium, quod nulla vitae.</p>
+            	    <button type="button" class="btn btn-default btn-ghost">Explore Categories</button>
+            	</div>
+            	<div class="col-sm-7">
+            	    <div id="map"></div>
+            	</div>
+            </div>
+        </div>
+
+		<div class="header">
+            <div id="menu" class="btn-group" role="group">
+            	<a type="button" class="btn btn-default btn-ghost pull-left" href="/"><i class="fa fa-home fa-lg"></i></a>
+                <a type="button" class="btn btn-default btn-ghost" data-menuanchor="home" href="#home">Home</a>
+                <a type="button" class="btn btn-default btn-ghost" data-menuanchor="today" href="#today">Today</a>
+                <a type="button" class="btn btn-default btn-ghost" data-menuanchor="yesterday" href="#yesterday">Yesterday</a>
+                <a type="button" class="btn btn-default btn-ghost" data-menuanchor="last-week" href="#last-week">Last Week</a>
+                <a type="button" class="btn btn-default btn-ghost" data-menuanchor="deep-time" href="#deep-time">Deep Time</a>
+                <a type="button" class="btn btn-default btn-ghost" id="nav" href="#nav"><i class="fa fa-bars fa-lg"></i></a>
+            </div>
+        </div>
+
+	    <div 	class="section centered"
+	    		style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );"
+	    		data-anchor="home">
+
+	    	<div class="container container-small">
+                <h1>{{camera.name}}</h1>
+				<p>{{camera.description}}</p>
+            </div>
+	    </div>
+
+		{% if todays_images %}
+		    <div 	class="section"
+		    		data-anchor="today">
+
+		    	{% for photo in todays_images %}
+		            <div class="slide bottom" style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
+		                <div class="slide-meta slide-meta-bottom slide-meta-left">
+		                    <h2>{{photo.photo_datetime}}</h2>
+		                    <p>ISO: {{photo.photo_iso}} | Shutter Speed: {{photo.photo_shutter_speed}} | Aperture: {{photo.photo_aperture}}</p>
+		                </div>
+		            </div>
+	            {% endfor %}
+
+	        </div>
+        {% else %}
+			<div class="section centered" data-anchor="today" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
+
+	            <h2>No Images Today</h2>
+
+	        </div>
+		{% endif %}
+
+		{% if yesterday_timelapse %}
+		    <div 	class="section"
+		    		data-anchor="yesterday">
+
+		    	{% for tl in yesterday_timelapse %}
+		            <div class="slide bottom" style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
+		                <div class="slide-meta slide-meta-bottom slide-meta-left">
+		                    <h3>Some sweet videos</h3>
+		                </div>
+		            </div>
+	            {% endfor %}
+
+	        </div>
+        {% else %}
+			<div class="section centered" data-anchor="yesterday" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
+
+	            <h2>No Timelapse Yesterday</h2>
+
+	        </div>
+		{% endif %}
+
+		{% if weekly_timelapse %}
+		    <div 	class="section"
+		    		data-anchor="last-week">
+
+		    	{% for tl in weekly_timelapse %}
+		            <div class="slide bottom" style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
+		                <div class="slide-meta slide-meta-bottom slide-meta-left">
+		                    <h3>Some sweet videos</h3>
+		                </div>
+		            </div>
+	            {% endfor %}
+
+	        </div>
+        {% else %}
+			<div class="section centered" data-anchor="last-week" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
+
+	            <h2>No Timelapse Last Week</h2>
+
+	        </div>
+		{% endif %}
+
+		{% if deep_time_images %}
+		    <div 	class="section"
+		    		data-anchor="deep-time">
+
+		    	{% for image in deep_time_images %}
+		            <div class="slide bottom" style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
+		                <div class="slide-meta slide-meta-bottom slide-meta-left">
+		                    <h3>Some sweet photos</h3>
+		                </div>
+		            </div>
+	            {% endfor %}
+
+	        </div>
+        {% else %}
+			<div class="section centered" data-anchor="deep-time" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
+
+	            <h2>No Images from Deep Time</h2>
+
+	        </div>
+		{% endif %}
+
+	</div>
+
+{% endblock %}
