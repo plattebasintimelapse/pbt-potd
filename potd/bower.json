@@ -16,6 +16,7 @@
   "dependencies": {
     "bootstrap-sass-official": "~3.3.5",
     "font-awesome": "~4.3.0",
-    "fullpage.js": "~2.6.6"
+    "fullpage.js": "~2.6.6",
+    "jquery.lazyload": "~1.9.5"
   }
 }
