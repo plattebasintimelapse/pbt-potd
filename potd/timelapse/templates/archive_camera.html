@@ -1,0 +1,20 @@
+{% extends "__base.html" %}
+
+{% block content %}
+
+	<div id="fullpage">
+	    <div class="section centered" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
+	    	<div class="container container-small">
+                <h1>{{camera.name}}'s Archives</h1>
+                <h3>Select a date:</h3>
+                <p>
+                	<em class="small">TODO: Show a calendar of all days that have old images</em>
+                </p>
+                <p>
+                	<em class="small">SAMPLE: /archives/rowe-sanctuary-tower/2015/07/07 will show images from that day</em>
+                </p>
+            </div>
+	    </div>
+	</div>
+
+{% endblock %}

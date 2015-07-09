@@ -1,0 +1,18 @@
+{% extends "__base.html" %}
+
+{% block content %}
+	
+	<div id="fullpage">
+	    <div class="section centered" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
+	    	<div class="container container-small">
+	    		<h1>Archived Cameras</h1>
+	    		{% if camera_list %}
+				    {% for camera in camera_list %}
+				        <span><a href="/archives{% url 'camera' camera.name_slug %}">{{ camera.name }}</a></span>
+				    {% endfor %}
+				{% endif %}
+	    	</div>
+	    </div>
+	</div>
+			
+{% endblock %}
