@@ -15,8 +15,6 @@ tests/
 node_modules/
 bower_components/
 
-fonts/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
