@@ -16,9 +16,9 @@ class Photo(models.Model):
     photo = models.ImageField(upload_to='photos/')
     photo_description = models.TextField(blank=True, null=True)
     photo_datetime = models.DateTimeField()
-    photo_aperture = models.CharField(max_length=50)
-    photo_shutter_speed = models.CharField(max_length=50)
-    photo_iso = models.CharField(max_length=50)
+    photo_aperture = models.CharField(max_length=50, blank=True, null=True)
+    photo_shutter_speed = models.CharField(max_length=50, blank=True, null=True)
+    photo_iso = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return "%s from %s" % (self.id, self.camera.name)
         
