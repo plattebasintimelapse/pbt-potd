@@ -17,6 +17,9 @@ def camera(request, slug):
 	camera = get_object_or_404(Camera, name_slug=slug)
 	todays_images = Photo.objects.filter(camera=camera, photo_datetime__year=today_year, photo_datetime__month=today_month, photo_datetime__day=today_day)
 	# todays_images = Photo.objects.filter(camera=camera.number)
+
+	# TODO - Create Deep Time Object for querying
+	# deep_time_images = OBJECT.objects.filter(camera=camera)
 	try:
 		yesterday_timelapse = TimeLapse.objects.get(camera=camera, movie_date__year=today_year, movie_date__month=today_month, movie_date__day=today_day-1   +1)
 	except ObjectDoesNotExist:
@@ -26,6 +29,8 @@ def camera(request, slug):
 		'camera': camera,
 		'todays_images': todays_images,
 		'yesterday_timelapse': yesterday_timelapse
+		# ,
+		# 'deep_time_images': deep_time_images
 	}
 	return render(request, 'camera.html', context)
 
