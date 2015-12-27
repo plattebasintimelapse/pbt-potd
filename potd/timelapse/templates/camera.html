@@ -57,5 +57,7 @@
 {% for photo in todays_images %}
 <div class="parallaxphoto parallaxphoto{{ photo.id }}" data-stellar-background-ratio="0.5"><span>{{ photo.photo_datetime }}</span></div>
 {% endfor %}
-<h3><a href="/{{ object.camera_slug }}/timelapse">See as a timelapse movie</h3>
+<center>
+<p><strong><a href="/{{ object.camera_slug }}/timelapse">See as a timelapse movie</a></strong></p>
+</center>
 {% endblock %}

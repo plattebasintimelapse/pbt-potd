@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}{{ object }} Timelapse | PBT{% endblock %}
+
 {% block heroimage %}
 		<section class="featured hero-image hero-image-behind" style="background-image: url({% if object.iconic_photo %}https://pbt-potd.s3.amazonaws.com/{{ object.iconic_photo }}{% else %}http://plattebasintimelapse.com/wp-content/uploads/2015/12/MormonIsland_20110317_Forsberg_048.jpg{% endif %}); background-position: center center;">
 			<div class="container-fluid">
