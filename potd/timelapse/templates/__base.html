@@ -9,6 +9,7 @@
 
         <script type="text/javascript" src="//use.typekit.net/dlv3qjg.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     </head>
     <body>
             {% block content %}
@@ -16,4 +17,13 @@
     </body>
 
     <script src="{% static 'main.min.js' %}"></script>
+	<script type="text/javascript" src="/static/js/jquery.stellar.min.js"></script>
+	<script>
+	$(function(){
+		$.stellar({
+			horizontalScrolling: false,
+			responsive: true
+		});
+	});
+	</script>
 </html>

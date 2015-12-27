@@ -1,132 +1,61 @@
-{% extends "__base.html" %}
+{% extends "base.html" %}
+
+{% block title %}{{ object }} | PBT{% endblock %}
+
+{% block extrastyles %}
+.parallaxphoto {
+	background-attachment: fixed;
+	background-position: 50% 0;
+	background-repeat: no-repeat;
+	height: 600px;
+	position: relative;
+}
+.parallaxphoto span {
+	bottom: 0;
+	color: white;
+	display: block;
+	left: 50%;
+	margin-left: -640px;
+	font-size: 38px;
+	padding: 10px;
+	position: absolute;
+	text-shadow: 0 2px 0 black, 0 0 10px black;
+	width: 1280px;
+}
+
+{% for photo in todays_images %}
+	.parallaxphoto{{ photo.id }} {
+			background-image: url(https://pbt-potd.s3.amazonaws.com/{{ photo.photo }});
+	}
+{% endfor %}
+
+<script type="text/javascript" src="/static/js/jquery.stellar.min.js"></script>
+<script>
+	$(function(){
+		$.stellar({
+			horizontalScrolling: false,
+			responsive: true
+		});
+	});
+</script>
+{% endblock %}
+
+{% block heroimage %}
+		<section class="featured hero-image hero-image-behind" style="background-image: url({% if object.iconic_photo %}https://pbt-potd.s3.amazonaws.com/{{ object.iconic_photo }}{% else %}http://plattebasintimelapse.com/wp-content/uploads/2015/12/MormonIsland_20110317_Forsberg_048.jpg{% endif %}); background-position: center center;">
+			<div class="container-fluid">
+
+				<h2 class="post-title">{{ object }}</h2>
+				
+			</div>
+		</section>
+{% endblock %}
 
 {% block content %}
-
-	<div id="fullpage">
-
-		<div class="overlay hidden">
-            <div class="v-centered h-centered text-center">
-            	<div class="col-sm-4 col-sm-offset-1">
-            	    <h1>Navigation Stuff</h1>
-            	    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident accusantium natus vitae odit incidunt numquam ducimus officia. Dolore, neque excepturi. Quam, omnis autem. Quis consequatur fugit accusantium, quod nulla vitae.</p>
-            	    <button type="button" class="btn btn-default btn-ghost">Explore Categories</button>
-            	</div>
-            	<div class="col-sm-7">
-            	    <div id="map"></div>
-            	</div>
-            </div>
-        </div>
-
-		<div class="header">
-            <div id="menu" class="btn-group" role="group">
-            	<a type="button" class="btn btn-default btn-ghost pull-left" href="/"><i class="fa fa-home fa-lg"></i></a>
-                <a type="button" class="btn btn-default btn-ghost" data-menuanchor="home" href="#home">Home</a>
-                <a type="button" class="btn btn-default btn-ghost" data-menuanchor="today" href="#today">Today</a>
-                <a type="button" class="btn btn-default btn-ghost" data-menuanchor="yesterday" href="#yesterday">Yesterday</a>
-                <a type="button" class="btn btn-default btn-ghost" data-menuanchor="last-week" href="#last-week">Last Week</a>
-                <a type="button" class="btn btn-default btn-ghost" data-menuanchor="deep-time" href="#deep-time">Deep Time</a>
-                <a type="button" class="btn btn-default btn-ghost" id="nav" href="#nav"><i class="fa fa-bars fa-lg"></i></a>
-            </div>
-        </div>
-
-	    <div 	class="section centered lazy"
-	    		data-original="{{ STATIC_URL }}images/placeholder.jpg"
-	    		style="background-image: url( '{{ STATIC_URL }}images/placeholder.jpg' );"
-	    		data-anchor="home">
-
-	    	<div class="container container-small">
-                <h1>{{camera.name}}</h1>
-				<p>{{camera.description}}</p>
-            </div>
-	    </div>
-
-		{% if todays_images %}
-		    <div 	class="section"
-		    		data-anchor="today">
-
-		    	{% for photo in todays_images %}
-		            <div 	class="slide bottom lazy"
-		            		data-original="https://pbt-potd.s3.amazonaws.com/{{photo.photo}}"
-		            		style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
-		                <div class="slide-meta slide-meta-bottom slide-meta-left">
-		                    <h2>{{photo.photo_datetime}}</h2>
-		                    <p>ISO: {{photo.photo_iso}} | Shutter Speed: {{photo.photo_shutter_speed}} | Aperture: {{photo.photo_aperture}}</p>
-		                </div>
-		            </div>
-	            {% endfor %}
-
-	        </div>
-        {% else %}
-			<div class="section centered" data-anchor="today" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
-
-	            <h2>No Images Today</h2>
-
-	        </div>
-		{% endif %}
-
-		{% if yesterday_timelapse %}
-		    <div 	class="section center section-dark"
-		    		data-anchor="yesterday">
-
-		    	<video autoplay loop class="full">
-	                <source src="https://pbt-potd.s3.amazonaws.com/{{yesterday_timelapse.movie}}">
-                </video>
-                <div class="slide-meta slide-meta-bottom slide-meta-left">
-                    <h2>{{ yesterday_timelapse.movie_date|date:"DATE_FORMAT"}}</h2>
-                </div>
-
-	        </div>
-
-        {% else %}
-			<div class="section centered" data-anchor="yesterday" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
-
-	            <h2>No Timelapse Yesterday</h2>
-
-	        </div>
-		{% endif %}
-
-		{% if weekly_timelapse %}
-		    <div 	class="section"
-		    		data-anchor="last-week">
-
-		    	{% for tl in weekly_timelapse %}
-		            <div class="slide bottom" style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
-		                <div class="slide-meta slide-meta-bottom slide-meta-left">
-		                    <h3>Some sweet videos</h3>
-		                </div>
-		            </div>
-	            {% endfor %}
-
-	        </div>
-        {% else %}
-			<div class="section centered" data-anchor="last-week" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
-
-	            <h2>No Timelapse Last Week</h2>
-
-	        </div>
-		{% endif %}
-
-		{% if deep_time_images %}
-		    <div 	class="section"
-		    		data-anchor="deep-time">
-
-		    	{% for image in deep_time_images %}
-		            <div class="slide bottom" style="background-image: url('https://pbt-potd.s3.amazonaws.com/{{photo.photo}}');">
-		                <div class="slide-meta slide-meta-bottom slide-meta-left">
-		                    <h3>Some sweet photos</h3>
-		                </div>
-		            </div>
-	            {% endfor %}
-
-	        </div>
-        {% else %}
-			<div class="section centered" data-anchor="deep-time" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
-
-	            <h2>No Images from Deep Time</h2>
-
-	        </div>
-		{% endif %}
-
-	</div>
-
+<div class="container">
+<p>{{ object.description }}</p>
+</div>
+{% for photo in todays_images %}
+<div class="parallaxphoto parallaxphoto{{ photo.id }}" data-stellar-background-ratio="0.5"><span>{{ photo.photo_datetime }}</span></div>
+{% endfor %}
+<h3><a href="/{{ object.camera_slug }}/timelapse">See as a timelapse movie</h3>
 {% endblock %}

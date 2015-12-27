@@ -1,18 +1,26 @@
-{% extends "__base.html" %}
+{% extends "base.html" %}
+
+{% block title %}Platte Live: See what our cameras are seeing today | PBT{% endblock %}
+{% block headline %}Platte Live: See what our cameras are seeing today{% endblock %}
 
 {% block content %}
-	
-	<div id="fullpage">
-	    <div class="section centered" style="background-image: url( '{{ STATIC_URL }}/images/placeholder.jpg' );">
-	    	<div class="container container-small">
-	    		<h1>Photo of the Day</h1>
-	    		{% if camera_list %}
-				    {% for camera in camera_list %}
-				        <span><a href="{% url 'camera' camera.name_slug %}">{{ camera.name }}</a></span>
-				    {% endfor %}
-				{% endif %}
-	    	</div>
-	    </div>
-	</div>
+	<div class="container container-padding story-post-feed">
+		<h2>Camera Locations</h2>
+			<div class="row">
+	{% for camera in camera_list %}
+							<div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-12 col-md-6 post-3390 post type-post status-publish format-audio has-post-thumbnail hentry category-water post_format-post-format-audio basin-central-platte">
+								
+	<div class="post-thumbnail">
+		<img width="400" height="200" src="{% if camera.iconic_photo %}{{ camera.iconic_photo }}{% else %}http://plattebasintimelapse.com/wp-content/uploads/2015/12/MormonIsland_20110317_Forsberg_048-400x200.jpg{% endif %}" class="attachment-pbt-post-thumbnail wp-post-image" alt="{{ camera.description }}" />
+		<div class="post-meta-box post-meta-box-lg">
 			
+			<a href="{% url 'camera' camera.camera_slug %}">
+				<h1 class="post-title">{{ camera.name }}</h1>
+			</a>
+
+			<a class="btn btn-default read-more-btn btn-block btn-max-width" role="button" rel="bookmark" title="Permanent Link" href="{% url 'camera' camera.camera_slug %}"><h5>See Photos</h5></a>
+		</div>
+	</div>
+	</div>
+{% endfor %}
 {% endblock %}
