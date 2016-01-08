@@ -1,14 +1,50 @@
 from django.shortcuts import get_object_or_404, render
 from django.core.exceptions import ObjectDoesNotExist
+from bakery.views import BuildableListView, BuildableDetailView
 from datetime import date
 
 from .models import Camera, Photo, TimeLapse
 
-def index(request):
-    camera_list = Camera.objects.all()
-    context = { 'camera_list': camera_list, }
-    return render(request, 'index.html', context)
+class CameraListView(BuildableListView):
+    model = Camera
+    template_name = 'index.html'
+    
+class CameraDetailView(BuildableDetailView):
+    model = Camera
+    template_name = 'camera.html'
+    slug_field = 'camera_slug'
+    def get_object(self):
+        return Camera.objects.get(camera_slug=self.kwargs.get("camera_slug"))
+    def get_context_data(self, **kwargs):
+        #today_year = date.today().year
+        #today_month = date.today().month
+        #today_day = date.today().day
+        today_year = 2015
+        today_month = 8
+        today_day = 17
+        context = super(CameraDetailView, self).get_context_data(**kwargs)
+        context['background_photo'] = Photo.objects.filter(camera=self.object, photo_datetime__year=today_year, photo_datetime__month=today_month, photo_datetime__day=today_day).order_by('photo_datetime')[5]
+        context['todays_images'] = Photo.objects.filter(camera=self.object, photo_datetime__year=today_year, photo_datetime__month=today_month, photo_datetime__day=today_day).order_by('photo_datetime')
+        return context
 
+class CameraDetailTimelapseView(BuildableDetailView):
+    model = Camera
+    template_name = 'timelapse.html'
+    slug_field = 'camera_slug'
+    def get_object(self):
+        return Camera.objects.get(camera_slug=self.kwargs.get("camera_slug"))
+    def get_context_data(self, **kwargs):
+        #today_year = date.today().year
+        #today_month = date.today().month
+        #today_day = date.today().day
+        today_year = 2015
+        today_month = 8
+        today_day = 17
+        context = super(CameraDetailTimelapseView, self).get_context_data(**kwargs)
+        context['todays_timelapse'] = TimeLapse.objects.get(camera=self.object, movie_date__year=today_year, movie_date__month=today_month, movie_date__day=today_day)
+        return context
+
+""""
 def camera(request, slug):
 	today_year = date.today().year
 	today_month = date.today().month
@@ -55,3 +91,5 @@ def archive_camera_day(request, slug, year, month, day):
 		'day': day,
 	}
 	return render(request, 'archive_camera_day.html', context)
+    
+"""

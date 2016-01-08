@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ object }} Timelapse | PBT{% endblock %}
+
+{% block heroimage %}
+		<section class="featured hero-image hero-image-behind" style="background-image: url({% if object.iconic_photo %}https://pbt-potd.s3.amazonaws.com/{{ object.iconic_photo }}{% else %}http://plattebasintimelapse.com/wp-content/uploads/2015/12/MormonIsland_20110317_Forsberg_048.jpg{% endif %}); background-position: center center;">
+			<div class="container-fluid">
+
+				<h2 class="post-title">{{ object }} Timelapse</h2>
+				
+			</div>
+		</section>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<h2>{{ todays_timelapse.movie_date|date:"DATE_FORMAT" }}</h2>
+
+			<video autoplay loop class="full" width="100%">
+				<source src="https://pbt-potd.s3.amazonaws.com/{{todays_timelapse.movie}}">
+			</video>
+</div>
+
+{% endblock %}
