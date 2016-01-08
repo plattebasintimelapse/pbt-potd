@@ -23,7 +23,7 @@ class CameraDetailView(BuildableDetailView):
         today_month = 8
         today_day = 17
         context = super(CameraDetailView, self).get_context_data(**kwargs)
-        context['background_photo'] = Photo.objects.filter(camera=self.object, photo_datetime__year=today_year, photo_datetime__month=today_month, photo_datetime__day=today_day).order_by('photo_datetime')[5]
+        #context['background_photo'] = Photo.objects.filter(camera=self.object, photo_datetime__year=today_year, photo_datetime__month=today_month, photo_datetime__day=today_day).order_by('photo_datetime')[5]
         context['todays_images'] = Photo.objects.filter(camera=self.object, photo_datetime__year=today_year, photo_datetime__month=today_month, photo_datetime__day=today_day).order_by('photo_datetime')
         return context
 
