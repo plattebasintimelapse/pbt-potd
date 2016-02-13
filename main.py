@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.core.files import File
 
 # THIS IS HACKY AS SHIT AND YOU'LL NEED TO CHANGE IT FOR YOUR OWN PATHING PURPOSES
-proj_path = "/Users/mattwaite/Dropbox/PBT/pbt-potd/potd"
+proj_path = "/home/pi/pbt-potd/potd"
 #END HACKY AS SHIT PART
 
 
@@ -145,18 +145,22 @@ def resize_images(d, name):
                         
                         img_resized = img_cropped.resize((1280,720), Image.ANTIALIAS)
                         
-                        img_resized.save( full_dest_path , 'JPEG', quality=100, exif=exif)
+                        img_resized.save( full_dest_path , 'JPEG', quality=85, exif=exif)
                         print "%s%s -> %s" % (src_path, file, full_dest_path )
                         total += 1
                         
                         exdate = datetime.datetime.strptime(img._getexif()[36867], "%Y:%m:%d %H:%M:%S")
                         exdate = timezone.make_aware(exdate, timezone.get_current_timezone())
                         f = File(open(full_dest_path, 'r'))
-                        cam = Camera.objects.get(number=name)
-                        pic = Photo(camera=cam, photo=f, photo_datetime=exdate)
-                        pic.photo.save(full_dest_path,f)
-                        pic.save()
-                        print "Saved a photo into the backend"
+                        try:
+                            cam = Camera.objects.get(number=name)
+                            pic = Photo(camera=cam, photo=f, photo_datetime=exdate)
+                            pic.photo.save(full_dest_path,f)
+                            pic.save()
+                            print "Saved a photo into the backend"
+                        except:
+                            pass
+                        
     
     print "\n"
     print "-------------------------------------------------"
@@ -213,18 +217,18 @@ def create_timelapse(d, name):
 
 if __name__ == "__main__":
     
-    print "\n"
-    print "Greetings!"
-    print "I'll help you make some timelapse videos!"
-    print "First, you'll need to resize your images. And then you can use those images to create a video."
-    print "\n"
+#    print "\n"
+#    print "Greetings!"
+#    print "I'll help you make some timelapse videos!"
+#    print "First, you'll need to resize your images. And then you can use those images to create a video."
+#    print "\n"
     
     ##################################
     ## Download Images from Dropbox ##
     ##        every 15 mins         ##
     ##################################
-    while query_yes_no("Do you want to download images from Dropbox? \nIt may take a long while.", "no"):
-        picturegetter.download_images(ORIGINAL_IMAGES_DIR, CAM_DIRECTORIES)
+#    while query_yes_no("Do you want to download images from Dropbox? \nIt may take a long while.", "no"):
+    picturegetter.download_images(ORIGINAL_IMAGES_DIR, CAM_DIRECTORIES)
     
     ##################################
     ## Delete Previous Weeks Images ##
@@ -249,8 +253,12 @@ if __name__ == "__main__":
     ## Timelapse Gen ##
     ##   each night  ##
     ###################
-    for cam in CAM_DIRECTORIES:
-        create_timelapse(cam, cam)
+    now = datetime.datetime.now()
+    if now.hour == 20:
+        for cam in CAM_DIRECTORIES:
+            create_timelapse(cam, cam)
+    else:
+        pass
     
     #############################
     ## Upload Timelapse to AWS ##

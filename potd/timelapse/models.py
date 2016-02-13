@@ -9,6 +9,10 @@ class Camera(models.Model):
     description = models.TextField(blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     iconic_photo = models.ImageField(upload_to='iconicphotos/', blank=True, null=True)
+    def get_absolute_url(self):
+        return "/%s/" % self.camera_slug
+    def get_timelapse_url(self):
+        return "/%s/timelapse/" % self.camera_slug
     def __str__(self):
         return self.name
         
@@ -30,3 +34,5 @@ class TimeLapse(models.Model):
     movie_description = models.TextField(blank=True, null=True)
     def __str__(self):
         return "%s from %s" % (self.movie_date, self.camera.name)
+    def get_absolute_url(self):
+        return "/%s/timelapse/" % self.camera.camera_slug

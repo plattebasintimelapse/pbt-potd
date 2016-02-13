@@ -14,6 +14,5 @@ urlpatterns = patterns('',
 #    url(r'^archives/(?P<slug>[-\w]+)/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/$', timelapse.views.archive_camera_day, name="archive_camera_day"),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^(?P<camera_slug>[-\w]+)/$', CameraDetailView.as_view(), name='camera'),
-    url(r'^(?P<camera_slug>[-\w]+)/timelapse/$', CameraDetailTimelapseView.as_view(), name='cameratimelapse'),
-    
+    url(r'^(?P<camera_slug>[-\w]+)/timelapse/$', CameraDetailTimelapseView.as_view(), name='cameratimelapse'),    
 )
