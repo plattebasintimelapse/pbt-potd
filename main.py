@@ -204,11 +204,15 @@ def create_timelapse(d, name):
         
         moviepath = output_dir + name + ".mp4"
         f = File(open(moviepath, 'r'))
-        cam = Camera.objects.get(number=name)
-        movietime = datetime.datetime.now()
-        vid = TimeLapse(camera=cam, movie=f, movie_date=movietime)
-        vid.movie.save(moviepath,f)
-        vid.save()
+        try:
+            cam = Camera.objects.get(number=name)
+            movietime = datetime.datetime.now()
+            vid = TimeLapse(camera=cam, movie=f, movie_date=movietime)
+            vid.movie.save(moviepath,f)
+            vid.save()
+            print "Timelapse movie for %s saved into the backend!" % cam
+        except:
+            pass
         
         print "\n"
         print "Complete!"

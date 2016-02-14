@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.core.exceptions import ObjectDoesNotExist
 from bakery.views import BuildableListView, BuildableDetailView
-from datetime import date
+from datetime import date, timedelta
 
 from .models import Camera, Photo, TimeLapse
 
@@ -35,12 +35,12 @@ class CameraDetailTimelapseView(BuildableDetailView):
     def get_object(self):
         return Camera.objects.get(camera_slug=self.kwargs.get("camera_slug"))
     def get_context_data(self, **kwargs):
-        today_year = date.today().year
-        today_month = date.today().month
-        today_day = date.today().day -1 
-        context = super(CameraDetailTimelapseView, self).get_context_data(**kwargs)
-        #context['todays_timelapse'] = TimeLapse.objects.get(camera=self.object, movie_date__year=today_year, movie_date__month=today_month, movie_date__day=today_day)
-        context['todays_timelapse'] = None
+        yesterday = date.today()-timedelta(1)
+        try:
+            context['todays_timelapse'] = TimeLapse.objects.get(camera=self.object, movie_date=date.today())
+            #context['todays_timelapse'] = TimeLapse.objects.get(camera=self.object, movie_date=yesterday)
+        except:
+            context['todays_timelapse'] = None
         return context
     def get_url(self, obj):
         return obj.get_timelapse_url()
