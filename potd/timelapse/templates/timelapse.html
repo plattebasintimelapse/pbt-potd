@@ -14,10 +14,10 @@
 
 {% block content %}
 <div class="container">
-<h2>{{ todays_timelapse.movie_date|date:"DATE_FORMAT" }}</h2>
+<h2>{% for object in todays_timelapse %}{{ object.movie_date|date:"DATE_FORMAT" }}{% endfor %}</h2>
 
 			<video autoplay loop class="full" width="100%">
-				<source src="https://pbt-potd.s3.amazonaws.com/{{todays_timelapse.movie}}">
+				<source src="https://pbt-potd.s3.amazonaws.com/{% for object in todays_timelapse %}{{ object.movie }}{% endfor %}">
 			</video>
 </div>
 

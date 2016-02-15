@@ -20,9 +20,6 @@ class CameraDetailView(BuildableDetailView):
         today_year = date.today().year
         today_month = date.today().month
         today_day = date.today().day
-        #today_year = 2015
-        #today_month = 8
-        #today_day = 17
         context = super(CameraDetailView, self).get_context_data(**kwargs)
         #context['background_photo'] = Photo.objects.filter(camera=self.object, photo_datetime__year=today_year, photo_datetime__month=today_month, photo_datetime__day=today_day).order_by('photo_datetime')[5]
         context['todays_images'] = Photo.objects.filter(camera=self.object, photo_datetime__year=today_year, photo_datetime__month=today_month, photo_datetime__day=today_day).order_by('photo_datetime')
@@ -35,13 +32,15 @@ class CameraDetailTimelapseView(BuildableDetailView):
     def get_object(self):
         return Camera.objects.get(camera_slug=self.kwargs.get("camera_slug"))
     def get_context_data(self, **kwargs):
-        yesterday = date.today()-timedelta(1)
-        try:
-            context['todays_timelapse'] = TimeLapse.objects.get(camera=self.object, movie_date=date.today())
-            #context['todays_timelapse'] = TimeLapse.objects.get(camera=self.object, movie_date=yesterday)
-        except:
-            context['todays_timelapse'] = None
-        return context
+        today = date.today() 
+        context = super(CameraDetailTimelapseView, self).get_context_data(**kwargs)
+        context['todays_timelapse'] = TimeLapse.objects.filter(camera=self.object, movie_date__year=today.year, movie_date__month=today.month, movie_date__day=today.day)
+        if context['todays_timelapse'] != None:
+            return context
+        else:
+            yesterday = date.today()-timedelta(1)
+            context['todays_timelapse'] = TimeLapse.objects.filter(camera=self.object, movie_date__year=yesterday.year, movie_date__month=yesterday.month, movie_date__day=yesterday.day)
+            return context
     def get_url(self, obj):
         return obj.get_timelapse_url()
 
