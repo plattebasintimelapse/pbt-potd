@@ -198,9 +198,9 @@ def create_timelapse(d, name):
         speed = str(10)
     
     if (num_of_images_in_dir != 0 ):
-        os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libx264 -crf 28 -preset medium " + output_dir + name + ".mp4")
-        os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v theora -q:v 7 " + output_dir + name + ".ogg")
-        os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libvpx -crf 6 -b:v 2M " + output_dir + name + ".webm")
+        os.system("/usr/local/bin/ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libx264 -crf 28 -preset medium " + output_dir + name + ".mp4")
+        #os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v theora -q:v 7 " + output_dir + name + ".ogg")
+        #os.system("ffmpeg -y -f image2 -framerate " + speed + " -i " + img_dir + name + "_%*.jpg -c:v libvpx -crf 6 -b:v 2M " + output_dir + name + ".webm")
         
         moviepath = output_dir + name + ".mp4"
         f = File(open(moviepath, 'r'))

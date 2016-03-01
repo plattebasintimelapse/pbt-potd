@@ -35,7 +35,7 @@ class CameraDetailTimelapseView(BuildableDetailView):
         today = date.today() 
         context = super(CameraDetailTimelapseView, self).get_context_data(**kwargs)
         context['todays_timelapse'] = TimeLapse.objects.filter(camera=self.object, movie_date__year=today.year, movie_date__month=today.month, movie_date__day=today.day)
-        if context['todays_timelapse'] != None:
+        if len(context['todays_timelapse']) == 1:
             return context
         else:
             yesterday = date.today()-timedelta(1)

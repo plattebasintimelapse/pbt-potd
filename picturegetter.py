@@ -17,22 +17,25 @@ def download_images(root, directories):
 
     folder_metadata = client.metadata('/cameras/')
 
-    for object in folder_metadata['contents']:
-        path = object['path']
-        picture_metadata = client.metadata(path)
-        for picture in picture_metadata['contents']:
-            pic = picture['path']
-            picfile = pic[1:]
-            if os.path.exists(picfile):
-                print "Skipping %s" % picfile
-            else:
-                try:
-                    print "Downloading %s" % picfile
-                    f, metadata = client.get_file_and_metadata(pic)
-                    out = open(picfile, 'a')
-                    out.write(f.read())
-                    out.close()
-                    time.sleep(2)
-                except IOError:
-                    print "Error when downloading %s" % picfile
-                    pass
+    try:
+        for object in folder_metadata['contents']:
+            path = object['path']
+            picture_metadata = client.metadata(path)
+            for picture in picture_metadata['contents']:
+                pic = picture['path']
+                picfile = pic[1:]
+                if os.path.exists(picfile):
+                    print "Skipping %s" % picfile
+                else:
+                    try:
+                        print "Downloading %s" % picfile
+                        f, metadata = client.get_file_and_metadata(pic)
+                        out = open(picfile, 'a')
+                        out.write(f.read())
+                        out.close()
+                        time.sleep(2)
+                    except IOError:
+                        print "Error when downloading %s" % picfile
+                        pass
+    except:
+        pass
