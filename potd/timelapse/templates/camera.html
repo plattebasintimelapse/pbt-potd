@@ -17,8 +17,7 @@
 	bottom: 0;
 	color: white;
 	display: block;
-	left: 50%;
-	margin-left: -640px;
+	margin-left: 5%;
 	font-size: 28px;
 	padding: 10px;
 	position: absolute;
@@ -35,6 +34,9 @@
 		background-size: cover;
 		width:100%;
 	}
+	.parallaxphoto span {
+		font-size: 18px;
+	}
 }
 
 {% for photo in todays_images %}
@@ -42,6 +44,11 @@
 			background-image: url(https://pbt-potd.s3.amazonaws.com/{{ photo.photo }});
 	}
 {% endfor %}
+
+.camera-description {
+	margin-left: 10%;
+	margin-right: 10%;
+}
 </style>
 
 <script type="text/javascript" src="https://potdtest.s3.amazonaws.com/static/js/jquery.stellar.min.js"></script>
@@ -69,7 +76,7 @@
 
 {% block content %}
 <div class="container-fluid">
-	<p>{{ object.description }}</p>
+	<p class="camera-description">{{ object.description }}</p>
 	{% for photo in todays_images %}
 		<div class="parallaxphoto parallaxphoto{{ photo.id }}" data-stellar-background-ratio="0.5"><span>{{ photo.photo_datetime }}</span></div>
 	{% endfor %}
