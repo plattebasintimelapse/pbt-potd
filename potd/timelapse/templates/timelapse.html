@@ -16,7 +16,7 @@
 <div class="container">
 <h2>{% for object in todays_timelapse %}{{ object.movie_date|date:"DATE_FORMAT" }}{% endfor %}</h2>
 
-			<video autoplay loop class="full" width="100%">
+			<video controls loop class="full" width="100%">
 				<source src="https://pbt-potd.s3.amazonaws.com/{% for object in todays_timelapse %}{{ object.movie }}{% endfor %}">
 			</video>
 </div>
