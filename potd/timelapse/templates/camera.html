@@ -77,11 +77,11 @@
 {% block content %}
 <div class="container-fluid">
 	<p class="camera-description">{{ object.description }}</p>
+	<center>
+		<p><strong><a href="/{{ object.camera_slug }}/timelapse">See yesterday as a timelapse movie</a> or scroll down to see today's images.</strong></p>
+	</center>
 	{% for photo in todays_images %}
 		<div class="parallaxphoto parallaxphoto{{ photo.id }}" data-stellar-background-ratio="0.5"><span>{{ photo.photo_datetime }}</span></div>
 	{% endfor %}
-	<center>
-		<p><strong><a href="/{{ object.camera_slug }}/timelapse">See as a timelapse movie</a></strong></p>
-	</center>
 </div>
 {% endblock %}
