@@ -99,68 +99,70 @@ def get_count_files_in_directory(path):
 # @param    name     string         Name of the new file, preceeding the extracted four_digits of original file
 #-----------------------------------------------------#
 def resize_images(d, name):
-    src_path = ORIGINAL_IMAGES_DIR + d + "/"
-    dest_path = RESIZED_IMAGES_DIR + d + "/" + TODAY + "/"
+    try:
+        src_path = ORIGINAL_IMAGES_DIR + d + "/"
+        dest_path = RESIZED_IMAGES_DIR + d + "/" + TODAY + "/"
     
-    make_dir(dest_path)
+        make_dir(dest_path)
     
-    dirs = os.listdir( src_path )
+        dirs = os.listdir( src_path )
     
-    total = 0
+        total = 0
     
-    print "\n"
-    print "Resizing Images:"
-    for file in dirs:
-        if os.path.isfile( src_path + file ):
-            if file.endswith('.JPG') or file.endswith('.jpg'): # only process jpgs.
+        print "\n"
+        print "Resizing Images:"
+        for file in dirs:
+            if os.path.isfile( src_path + file ):
+                if file.endswith('.JPG') or file.endswith('.jpg'): # only process jpgs.
                 
-                four_digit = file[4:-4] # four digit string in file name
-                full_dest_path = dest_path + name + "_" + four_digit + ".jpg"
+                    four_digit = file[4:-4] # four digit string in file name
+                    full_dest_path = dest_path + name + "_" + four_digit + ".jpg"
                 
-                if os.path.exists(full_dest_path):
-                    print "Already resized %s" % full_dest_path
-                else:
-                    if is_non_zero_file( src_path + file ): # skip partially download files
+                    if os.path.exists(full_dest_path):
+                        print "Already resized %s" % full_dest_path
+                    else:
+                        if is_non_zero_file( src_path + file ): # skip partially download files
                         
-                        img = Image.open( src_path + file )
+                            img = Image.open( src_path + file )
                         
-                        width = img.size[0]
-                        height = img.size[1]
-                        half_the_width = width / 2
-                        half_the_height = height / 2
+                            width = img.size[0]
+                            height = img.size[1]
+                            half_the_width = width / 2
+                            half_the_height = height / 2
                         
-                        ASPECT_RATIO = 1.7777777777777777777777777777777778
+                            ASPECT_RATIO = 1.7777777777777777777777777777777778
                         
-                        half_the_computed_height = width / ASPECT_RATIO / 2
+                            half_the_computed_height = width / ASPECT_RATIO / 2
                         
                         # Crop from image center
-                        img_cropped = img.crop((
-                            half_the_width - half_the_width,
-                            half_the_height - int(half_the_computed_height),
-                            half_the_width + half_the_width,
-                            half_the_height + int(half_the_computed_height)
-                        ))
+                            img_cropped = img.crop((
+                                half_the_width - half_the_width,
+                                half_the_height - int(half_the_computed_height),
+                                half_the_width + half_the_width,
+                                half_the_height + int(half_the_computed_height)
+                            ))
                         
-                        exif = img.info['exif']
+                            exif = img.info['exif']
                         
-                        img_resized = img_cropped.resize((1280,720), Image.ANTIALIAS)
+                            img_resized = img_cropped.resize((1280,720), Image.ANTIALIAS)
                         
-                        img_resized.save( full_dest_path , 'JPEG', quality=85, exif=exif)
-                        print "%s%s -> %s" % (src_path, file, full_dest_path )
-                        total += 1
+                            img_resized.save( full_dest_path , 'JPEG', quality=85, exif=exif)
+                            print "%s%s -> %s" % (src_path, file, full_dest_path )
+                            total += 1
                         
-                        exdate = datetime.datetime.strptime(img._getexif()[36867], "%Y:%m:%d %H:%M:%S")
-                        exdate = timezone.make_aware(exdate, timezone.get_current_timezone())
-                        f = File(open(full_dest_path, 'r'))
-                        try:
-                            cam = Camera.objects.get(number=name)
-                            pic = Photo(camera=cam, photo=f, photo_datetime=exdate)
-                            pic.photo.save(full_dest_path,f)
-                            pic.save()
-                            print "Saved a photo into the backend"
-                        except:
-                            pass
-                        
+                            exdate = datetime.datetime.strptime(img._getexif()[36867], "%Y:%m:%d %H:%M:%S")
+                            exdate = timezone.make_aware(exdate, timezone.get_current_timezone())
+                            f = File(open(full_dest_path, 'r'))
+                            try:
+                                cam = Camera.objects.get(number=name)
+                                pic = Photo(camera=cam, photo=f, photo_datetime=exdate)
+                                pic.photo.save(full_dest_path,f)
+                                pic.save()
+                                print "Saved a photo into the backend"
+                            except:
+                                pass
+    except:
+        pass                    
     
     print "\n"
     print "-------------------------------------------------"
