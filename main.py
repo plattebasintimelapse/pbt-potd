@@ -277,7 +277,7 @@ if __name__ == "__main__":
     prompt_break()
     print "END"
 
-slack_token = "xoxp-27396864531-27396864755-145613909668-026e04980f5ab7c70e03e9496dd4b413"
+slack_token = "add one here"
 sc = SlackClient(slack_token)
 
 sc.api_call(
