@@ -45,7 +45,7 @@ if (map.tap) map.tap.disable();
 							<div class="col-xs-10 col-xs-offset-1 col-sm-offset-0 col-sm-12 col-md-6 post-3390 post type-post status-publish format-audio has-post-thumbnail hentry category-water post_format-post-format-audio basin-central-platte">
 								
 	<div class="post-thumbnail">
-		<img width="400" height="200" src="{% if camera.iconic_photo %}https://pbt-potd.s3.amazonaws.com/{{ camera.iconic_photo }}{% else %}http://plattebasintimelapse.com/wp-content/uploads/2015/12/MormonIsland_20110317_Forsberg_048-400x200.jpg{% endif %}" class="attachment-pbt-post-thumbnail wp-post-image" alt="{{ camera.description }}" />
+		<img width="400" height="200" src="{% if camera.iconic_photo %}/static/{{ camera.iconic_photo }}{% else %}http://plattebasintimelapse.com/wp-content/uploads/2015/12/MormonIsland_20110317_Forsberg_048-400x200.jpg{% endif %}" class="attachment-pbt-post-thumbnail wp-post-image" alt="{{ camera.description }}" />
 		<div class="post-meta-box post-meta-box-lg">
 			
 			<a href="{% url 'camera' camera.camera_slug %}">

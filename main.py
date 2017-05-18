@@ -277,12 +277,12 @@ if __name__ == "__main__":
     prompt_break()
     print "END"
 
-slack_token = "add one here"
-sc = SlackClient(slack_token)
+#slack_token = "add one here"
+#sc = SlackClient(slack_token)
 
-sc.api_call(
-  "chat.postMessage",
-  channel="#botstatus",
-  now = datetime.datetime.now()
-  text="I updated at %s" % now
-)
+#sc.api_call(
+#  "chat.postMessage",
+#  channel="#botstatus",
+#  now = datetime.datetime.now(),
+#  text="I updated at %s" % now
+#)

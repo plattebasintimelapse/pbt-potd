@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib import admin
 from timelapse.views import CameraListView, CameraDetailView, CameraDetailTimelapseView
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Examples:
     # url(r'^$', 'potd.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
@@ -15,4 +15,4 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^(?P<camera_slug>[-\w]+)/$', CameraDetailView.as_view(), name='camera'),
     url(r'^(?P<camera_slug>[-\w]+)/timelapse/$', CameraDetailTimelapseView.as_view(), name='cameratimelapse'),    
-)
+]

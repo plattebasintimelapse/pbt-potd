@@ -22,5 +22,5 @@ class Command(BaseCommand):
             cdesc = row[0]
             cx = row[2]
             cy = row[3]
-            c = Camera.objects.get_or_create(name=cname, name_slug=cslug, number=cnum, location_x=cx, location_y=cy, description=cdesc)
+            c = Camera.objects.get_or_create(name=cname, camera_slug=cslug, number=cnum, location_x=cx, location_y=cy, description=cdesc)
             self.stdout.write("Successfully created %s" % cname)

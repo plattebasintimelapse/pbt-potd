@@ -65,7 +65,7 @@
 {% endblock %}
 
 {% block heroimage %}
-		<section class="featured hero-image hero-image-behind" style="background-image: url({% if object.iconic_photo %}https://pbt-potd.s3.amazonaws.com/{{ object.iconic_photo }}{% else %}http://pbt-potd.s3.amazonaws.com/static-images/mormonisland.jpg{% endif %}); background-position: center center;">
+		<section class="featured hero-image hero-image-behind" style="background-image: url({% if object.iconic_photo %}https://current.plattebasintimelapse.com/static/{{ object.iconic_photo }}{% else %}http://pbt-potd.s3.amazonaws.com/static-images/mormonisland.jpg{% endif %}); background-position: center center;">
 			<div class="container-fluid">
 
 				<h2 class="post-title">{{ object }}</h2>
